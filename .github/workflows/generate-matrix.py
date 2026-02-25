@@ -83,6 +83,5 @@ if RUN_ALL_JOBS:
     matrix.append({"tox_env": "pypy3", "python_version": "pypy3.10"})
 
 
-output = json.dumps(matrix, indent=2)
-print(output)  # noqa: T201
-stdout.write(output)
+print(json.dumps(matrix, indent=2))  # noqa: T201
+stdout.write(json.dumps(matrix))
