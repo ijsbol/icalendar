@@ -19,10 +19,11 @@ jobs:
     outputs:
       include: ${{ steps.set-matrix.outputs.include }}
     steps:
+    - uses: actions/checkout@v6
     - name: Set matrix
       id: set-matrix
       run: |
-        echo "include=$(python .github/workflows/generate-matrix.py '${{ github.ref }}' '$${{ github.event.review.state }}' )" >> $GITHUB_OUTPUT
+        echo "include=$(python .github/workflows/generate-matrix.py '${{ github.ref }}' '${{ github.event.review.state }}' )" >> $GITHUB_OUTPUT
 
   run-tests:
     needs: generate-matrix
