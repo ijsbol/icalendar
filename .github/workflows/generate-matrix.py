@@ -82,6 +82,10 @@ if RUN_ALL_JOBS:
     # pypy is slow but good to test
     matrix.append({"tox_env": "pypy3", "python_version": "pypy3.10"})
 
+for run in matrix:
+    run["test_name"] = run["python_version"]
+    if run["tox_env"] != "py":
+        run["test_name"] += f" ({run['tox_env']})"
 
 print(json.dumps(matrix, indent=2))  # noqa: T201
 stdout.write(json.dumps(matrix))

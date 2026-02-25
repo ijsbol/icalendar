@@ -32,7 +32,7 @@ jobs:
         include: ${{ fromJSON(needs.generate-matrix.outputs.include) }}
   
     runs-on: ubuntu-latest
-    name: ${{ matrix.tox_env }}
+    name: ${{ matrix.test_name }}
     steps:
     - uses: actions/checkout@v6
     - name: Set up Python
