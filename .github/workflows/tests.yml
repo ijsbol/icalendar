@@ -14,30 +14,21 @@ on:
     types: [submitted]
 
 jobs:
+  generate-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      include: ${{ steps.set-matrix.outputs.include }}
+    steps:
+    - name: Set matrix
+      id: set-matrix
+      run: |
+        echo "include=$(python .github/workflows/generate-matrix.py '${{ github.ref }}' '$${{ github.event.review.state }}' )" >> $GITHUB_OUTPUT
+
   run-tests:
+    needs: generate-matrix
     strategy:
       matrix:
-        include:
-        # for python versions, see https://github.com/actions/setup-python/tree/v6/?tab=readme-ov-file#basic-usage
-        # for pull request approval, see https://stackoverflow.com/a/70441157/1320237
-        - python_version: "3.10"
-          tox_env: "nopytz"  # use lowest allowed version for nopytz
-        - python_version: "3.10"
-          tox_env: "py310"
-        - python_version: "pypy3.10"
-          tox_env: "pypy3"
-          if: github.event.review.state == 'approved'
-        - python_version: "3.11"
-          tox_env: "py311"
-          if: github.event.review.state == 'approved'
-        - python_version: "3.12"
-          tox_env: "py312"
-          if: github.event.review.state == 'approved'
-        - python_version: "3.13"
-          tox_env: "py313"
-          if: github.event.review.state == 'approved'
-        - python_version: "3.14"
-          tox_env: "py314"
+        include: ${{ fromJSON(needs.generate-matrix.outputs.include) }}
   
     runs-on: ubuntu-latest
     name: ${{ matrix.tox_env }}
