@@ -55,7 +55,7 @@ jobs:
     - name: Coveralls Parallel
       uses: coverallsapp/github-action@v2
       with:
-        flag-name: run-${{ matrix.tox_env }}
+        flag-name: run-${{ matrix.python_version }}-${{ matrix.tox_env }}
         parallel: true
         file: coverage.xml
         allow-empty: true
